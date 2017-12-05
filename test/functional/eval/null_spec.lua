@@ -54,7 +54,7 @@ describe('NULL', function()
                         ('[writefile(L, "%s"), readfile("%s")]'):format(tmpfname, tmpfname),
                         'E484: Can\'t open file ' .. tmpfname, {0, {}})
     -- FIXME should give error message
-    null_expr_test('does not crash remove()', 'remove(L, 0)', 0, 0)
+    null_expr_test('does not crash remove()', 'remove(L, 0)', 'E684: list index out of range: 0', 0)
     -- FIXME should return 0
     null_expr_test('is accepted by setqflist()', 'setqflist(L)', 0, -1)
     -- FIXME should return 0

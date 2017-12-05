@@ -13249,16 +13249,15 @@ static void f_remove(typval_T *argvars, typval_T *rettv, FunPtr fptr)
     }
   } else if (argvars[0].v_type != VAR_LIST) {
     EMSG2(_(e_listdictarg), "remove()");
-  } else if ((l = argvars[0].vval.v_list) != NULL
-             && !tv_check_lock(l->lv_lock, arg_errmsg, TV_TRANSLATE)) {
+  } else {
     bool error = false;
-
     idx = tv_get_number_chk(&argvars[1], &error);
     if (error) {
       // Type error: do nothing, errmsg already given.
-    } else if ((item = tv_list_find(l, idx)) == NULL) {
+    } else if (((item = tv_list_find(l, idx)) == NULL)
+               || (l = argvars[0].vval.v_list) == NULL) {
       EMSGN(_(e_listidx), idx);
-    } else {
+    } else if (!tv_check_lock(l->lv_lock, arg_errmsg, TV_TRANSLATE)) {
       if (argvars[2].v_type == VAR_UNKNOWN) {
         // Remove one item, return its value.
         tv_list_remove_items(l, item, item);
